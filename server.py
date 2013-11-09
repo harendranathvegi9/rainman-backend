@@ -7,11 +7,6 @@ from datetime import timedelta
 from functools import update_wrapper
 
 
-from datetime import timedelta
-from flask import make_response, request, current_app
-from functools import update_wrapper
-
-
 def crossdomain(origin=None, methods=None, headers=None,
                 max_age=21600, attach_to_all=True,
                 automatic_options=True):
@@ -41,12 +36,10 @@ def crossdomain(origin=None, methods=None, headers=None,
                 return resp
 
             h = resp.headers
+
             h['Access-Control-Allow-Origin'] = origin
             h['Access-Control-Allow-Methods'] = get_methods()
             h['Access-Control-Max-Age'] = str(max_age)
-            h['Access-Control-Allow-Credentials'] = 'true'
-            h['Access-Control-Allow-Headers'] = \
-                "Origin, X-Requested-With, Content-Type, Accept, Authorization"
             if headers is not None:
                 h['Access-Control-Allow-Headers'] = headers
             return resp
@@ -216,12 +209,13 @@ def checkArticle(content, domain):
 def home():
 	return 'Hello World!'
 
-@app.route('/api', methods=['POST'])
-@crossdomain(origin='*')
+@app.route('/api', methods=['POST', 'OPTIONS'])
+@crossdomain(origin='*', headers=["Accept", "Content-Type"])
 def api():
-	content = request.form['content']
-	domain = request.form['domain']
-	return jsonify(message='Hello')
+  return jsonify(request.get_json())
+  # return jsonify(message='Hello')
+	# content = request.form['content']
+	# domain = request.form['domain']
 
 if __name__ == '__main__':
 	app.run(debug=True)
