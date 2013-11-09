@@ -87,6 +87,7 @@ class Filters:
 		trees = nltk.batch_ne_chunk(sentences)
 		for tree in trees:
 			self._traverse(tree)
+		print self._ne
 		return self._ne, []
 
 
@@ -209,7 +210,7 @@ def home():
 	return 'Hello World!'
 
 @app.route('/api', methods=['POST','OPTIONS'])
-@crossdomain(origin='*')
+@crossdomain(origin='*',headers='Content-Type')
 def api():
 	content = request.form['content']
 	domain = request.form['domain']
