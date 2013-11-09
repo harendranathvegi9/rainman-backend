@@ -1,10 +1,12 @@
 import os
 from flask import Flask, request,jsonify
+import nltk
 
 app = Flask(__name__)
 
 def rainman(content, domain):
-	cards = []
+	sentence = "Hello, my name is Seth."
+	cards = nltk.word_tokenize(sentence)
 	return jsonify(content=content, cards=cards)
 
 @app.route('/')
