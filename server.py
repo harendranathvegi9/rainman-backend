@@ -196,7 +196,7 @@ def rainman(full_html, domain):
   content = parse(full_html, domain)
   cards = []
   content, cards = run_filters(content, domain)
-  return jsonify(content=content, cards=cards)
+  return jsonify(content=content['readable'], cards=cards)
 
 def parse(full_html, domain):
   readable_html = readable(full_html, domain)
