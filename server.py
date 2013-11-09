@@ -7,6 +7,7 @@ from datetime import timedelta
 from functools import update_wrapper
 from collections import defaultdict
 
+nltk.data.path.append('./nltk_data/')
 
 def crossdomain(origin=None, methods=None, headers=None,
                 max_age=21600, attach_to_all=True,
