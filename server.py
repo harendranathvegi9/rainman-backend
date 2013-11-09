@@ -107,12 +107,11 @@ class Filters:
     for term in terms:
       try:
         card = self._wikipedia_card(term)
-        print card.title
-      except:
-        pass
-      else:
         if card['title'] not in [c['title'] for c in cards]:
           cards.append(card)
+        print card.title
+      except:
+        pass        
 
     return content, cards
 
