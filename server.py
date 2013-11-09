@@ -5,6 +5,7 @@ from readability.readability import Document
 import wikipedia
 from datetime import timedelta
 from functools import update_wrapper
+from collections import defaultdict
 
 
 def crossdomain(origin=None, methods=None, headers=None,
@@ -77,18 +78,41 @@ class Filters:
 
   def __init__(self):
     self._ne = []
+    self._ne_count = defaultdict(int)
     self.functions = [self.named_entities]
     return
 
   def named_entities(self, content, domain):
-    sentences = nltk.sent_tokenize(content['raw'])
+    sentences = nltk.sent_tokenize(content['raw'].encode('utf-8'))
     sentences = [nltk.word_tokenize(sent) for sent in sentences]
     sentences = [nltk.pos_tag(sent) for sent in sentences]
     trees = nltk.batch_ne_chunk(sentences)
     for tree in trees:
       self._traverse(tree)
-    print self._ne
-    return self._ne, []
+    self._ne.sort(key=lambda x: self._ne_count[str(x)], reverse=True)
+
+    terms = []
+    for ne in self._ne:
+      term = ""
+      for token in ne:
+        term += " "+token[0]
+      terms.append(term)
+
+    terms = terms[:10]
+
+    terms.sort(key=lambda x: content['raw'].find(x))
+
+    cards = []
+    for term in terms:
+      try:
+        card = self._wikipedia_card(term)
+        print card.title
+      except:
+        pass
+      if card and card['title'] not in [c['title'] for c in cards]:
+        cards.append(card)
+
+    return content, cards
 
 
   def _traverse(self,t):
@@ -96,10 +120,6 @@ class Filters:
       'ORGANIZATION',
       'PERSON',
       'LOCATION',
-      'DATE',
-      'TIME',
-      'MONEY',
-      'PERCENT',
       'FACILITY',
       'GPE'
     ]
@@ -109,8 +129,12 @@ class Filters:
       return
     else:
       if t.node in ne:
-        if t not in self._ne:
-          self._ne.append(t)
+          try:
+            self._ne_count[str(t)] += 1
+          except:
+            pass
+          if t not in self._ne:
+            self._ne.append(t)
       else:
         for child in t:
           self._traverse(child)
@@ -212,8 +236,12 @@ def home():
 @app.route('/api', methods=['POST', 'OPTIONS'])
 @crossdomain(origin='*', headers=["Accept", "Content-Type"])
 def api():
-  r = request.get_json()
-  return jsonify(request.get_json())
+  # r = request.get_json()
+  # content = r['content']
+  # domain = r['domain']
+  content = request.form['content']
+  domain = request.form['domain']
+  return rainman(content, domain)
   # return jsonify(message='Hello')
   # content = request.form['content']
   # domain = request.form['domain']
