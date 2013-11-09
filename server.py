@@ -214,7 +214,7 @@ def home():
 def api():
 	content = request.form['content']
 	domain = request.form['domain']
-	return rainman(content, domain)
+	return jsonify(message='Hello')
 
 if __name__ == '__main__':
 	app.run(debug=True)
