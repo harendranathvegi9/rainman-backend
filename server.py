@@ -110,8 +110,9 @@ class Filters:
         print card.title
       except:
         pass
-      if card and card['title'] not in [c['title'] for c in cards]:
-        cards.append(card)
+      else:
+        if card['title'] not in [c['title'] for c in cards]:
+          cards.append(card)
 
     return content, cards
 
