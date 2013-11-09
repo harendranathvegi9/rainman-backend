@@ -168,8 +168,8 @@ class Filters:
 def rainman(full_html, domain):
 	content = parse(full_html, domain)
 	cards = []
-	#content, cards = run_filters(content, domain)
-	return jsonify(content=content['readable'], cards=cards)
+	content, cards = run_filters(content, domain)
+	return jsonify(content=content, cards=cards)
 
 def parse(full_html, domain):
 	readable_html = readable(full_html, domain)
@@ -208,7 +208,7 @@ def checkArticle(content, domain):
 def home():
 	return 'Hello World!'
 
-@app.route('/api', methods=['POST'])
+@app.route('/api', methods=['POST','OPTIONS'])
 @crossdomain(origin='*')
 def api():
 	content = request.form['content']
