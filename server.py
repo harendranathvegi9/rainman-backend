@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request,jsonify, make_response, current_app
+from flask import Flask, request,jsonify, make_response, current_app, url_for, redirect, render_template
 import nltk
 from readability.readability import Document
 import wikipedia
@@ -272,7 +272,7 @@ def checkArticle(content, domain):
 
 @app.route('/')
 def home():
-  return 'Hello World!'
+  return render_template('index.html')
 
 @app.route('/api', methods=['POST', 'OPTIONS'])
 @crossdomain(origin='*', headers=["Accept", "Content-Type"])
