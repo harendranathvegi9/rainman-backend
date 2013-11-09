@@ -6,6 +6,8 @@ import wikipedia
 from datetime import timedelta
 from functools import update_wrapper
 from collections import defaultdict
+import json
+import simplejson
 
 nltk.data.path.append('./nltk_data/')
 
@@ -115,7 +117,6 @@ class Filters:
 
     return content, cards
 
-
   def _traverse(self,t):
     ne = [
       'ORGANIZATION',
@@ -192,17 +193,53 @@ class Filters:
     return difflib.SequenceMatcher(a=term1.lower(), b=term2.lower()).ratio() > 0.5
 
 def rainman(full_html, domain):
+  #cached = get(domain)
+  #if cached:
+  #  print "GET HERE"
+  #  return cached
   content = parse(full_html, domain)
   cards = []
   content, cards = run_filters(content, domain)
-  return jsonify(content=content['readable'], cards=cards)
+
+  data = jsonify(content=content['readable'], cards=cards, title=content['title'])
+  #put(data, domain)
+  return data
+
+def put(data, domain):
+  if not os.path.exists('cached'):
+    os.makedirs('cached')
+  import binascii
+  name = str(binascii.crc32(domain))
+  path = os.path.join('cached',name)
+  try:
+    fd = open(path, 'w')
+    fd.write(data)
+    fd.close()
+  except:
+    pass
+
+def get(domain):
+  import binascii
+  name = str(binascii.crc32(domain))
+  path = os.path.join('cached',name)
+  returndata = False
+
+  try:
+    fd = open(path, 'r')
+    text = fd.read()
+    fd.close()
+    returndata = json.read(text)
+  except:
+    pass
+  return returndata
 
 def parse(full_html, domain):
-  readable_html = readable(full_html, domain)
+  readable_html, title = readable(full_html, domain)
   raw = nltk.clean_html(readable_html)
   content = {}
   content['raw'] = raw
   content['readable'] = readable_html
+  content['title'] = title
   checkArticle(content, domain)
   return content
 
@@ -218,8 +255,11 @@ def run_filters(content, domain):
 
 def readable(full_html, domain):
   positive, negative = article_patterns(domain)
-  readable_html = Document(full_html, positive_keywords=positive, negative_keywords=negative).summary()
-  return readable_html
+  doc = Document(full_html, positive_keywords=positive, negative_keywords=negative)
+  readable_html = doc.summary()
+  title = doc.short_title()
+  print title
+  return readable_html, title
 
 def article_patterns(domain):
   return [],[]
@@ -239,7 +279,7 @@ def home():
 def api():
   r = request.get_json()
   content = r['content']
-  domain = r['domain']
+  domain = r['url']
   # content = request.form['content']
   # domain = request.form['domain']
   return rainman(content, domain)
