@@ -217,7 +217,7 @@ def home():
 	return 'Hello World!'
 
 @app.route('/api', methods=['POST','OPTIONS'])
-@crossdomain(origin='*',headers='Content-Type')
+@crossdomain(origin='*')
 def api():
 	content = request.form['content']
 	domain = request.form['domain']
