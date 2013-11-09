@@ -237,11 +237,11 @@ def home():
 @app.route('/api', methods=['POST', 'OPTIONS'])
 @crossdomain(origin='*', headers=["Accept", "Content-Type"])
 def api():
-  # r = request.get_json()
-  # content = r['content']
-  # domain = r['domain']
-  content = request.form['content']
-  domain = request.form['domain']
+  r = request.get_json()
+  content = r['content']
+  domain = r['domain']
+  # content = request.form['content']
+  # domain = request.form['domain']
   return rainman(content, domain)
   # return jsonify(message='Hello')
   # content = request.form['content']
