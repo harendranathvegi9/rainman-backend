@@ -216,7 +216,7 @@ def checkArticle(content, domain):
 def home():
 	return 'Hello World!'
 
-@app.route('/api', methods=['POST','OPTIONS'])
+@app.route('/api', methods=['POST'])
 @crossdomain(origin='*')
 def api():
 	content = request.form['content']
