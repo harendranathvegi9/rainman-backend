@@ -2,8 +2,9 @@ import os
 from flask import Flask, request,jsonify
 import nltk
 from readability.readability import Document
+import wikipedia
 
-MIN_LEN = 200
+MIN_LEN = 0
 
 app = Flask(__name__)
 
@@ -30,21 +31,67 @@ def handle_error(error):
 
 class Filters:
 
-	def named_entites(content, domain):
-		
+	def __init__(self):
+		self.functions = [self.tokenize_words, self.proper_nouns]
+		return
+
+	def tokenize_words(self, content, domain):
+		content['tokens'] = nltk.word_tokenize(content['raw'].encode('utf-8'))
 		return content, []
 
-	def wikipedia(content,domain):
-		cards = ['Hello']
-		return content,cards
+ 
 
-	functions = [named_entites, wikipedia]
+	def _wikipedia_card(self,query):
+		try:
+			page = wikipedia.page(query)
+		except:
+			return False
+		card = {}
+		card['title'] = page.title
+		card['url'] = page.url
+		card['summary'] = page.summary
+		card['images'] = [image for image in page.images if self._filter_image(image)]
+		card['images'] = card['images'][:4]
+		return card
+
+	def _filter_image(self,image):
+		return ("commons" in image) and image.endswith('.jpg')
+
+	def collocations(self,content, domain):
+		text = nltk.Text(content['tokens'])
+		collocations = self._collocations_from_text(text)
+		cards = []
+		#collocations = ['White House','health care', 'West Wing', 'Mr. Obama', 'said, ','Mr. Obama\'s', 'said one', 'Wing staff', 'Democratic lawmakers', 'staff members','President Obama', 'White House.', 'care problems', 'Mr. McDonough', 'senior']
+		for phrase in collocations:
+			card = self._wikipedia_card(phrase)
+
+			cards.append(card)
+		return content, cards
+
+	def _collocations_from_text(self,text):
+		window_size = 2
+		num = 20
+		from nltk.corpus import stopwords
+		from nltk.metrics import f_measure, BigramAssocMeasures, TrigramAssocMeasures
+		from nltk.collocations import BigramCollocationFinder, TrigramCollectionFinder
+		ignored_words = stopwords.words('english')
+		finder = BigramCollocationFinder.from_words(text.tokens, window_size)
+		finder.apply_freq_filter(2)
+		finder.apply_word_filter(lambda w: len(w) < 3 or w.lower() in ignored_words)
+		bigram_measures = BigramAssocMeasures()
+		trigram_measures = TrigramAssocMeasures()
+		collocations = finder.nbest(bigram_measures.likelihood_ratio,num)
+		colloc_strings = [w1+' '+w2 for w1, w2 in collocations]
+		return colloc_strings
+
+	def _similar_terms(self, term1, term2):
+		import difflib
+		return difflib.SequenceMatcher(a=term1.lower(), b=term2.lower()).ratio() > 0.5
 
 def rainman(full_html, domain):
 	content = parse(full_html, domain)
-	content, cards = run_filters(content, domain)
-
-	return content['readable']
+	cards = []
+	#content, cards = run_filters(content, domain)
 
 	return jsonify(content=content['readable'], cards=cards)
 
@@ -60,7 +107,6 @@ def parse(full_html, domain):
 def run_filters(content, domain):
 	cards = []
 	filters = Filters()
-
 	for f in filters.functions:
 		fcontent, fcards = f(content, domain)
 		content = fcontent
