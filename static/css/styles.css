@@ -181,20 +181,20 @@ header h1 a:hover {
 
 .info {
 	width: 100%;
-	height: 320px;
+	height: 360px;
 	background: #fffbed;
 }
 
 .left {
 	float: left;
-	margin-top: 70px;
+	margin-top: 50px;
 	width: 50%;
 }
 
 
 .right {
 	float: right;
-	margin-top: 70px;
+	margin-top: 50px;
 	width: 50%;
 }
 
