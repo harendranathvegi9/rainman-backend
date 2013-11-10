@@ -264,9 +264,9 @@ header h1 a:hover {
 /* Footer */
 
 footer {
+	color: #fffbed;
 	width: 100%;
-	height: 200px;
-	background: #eee;
+	height: 170px;
 	-webkit-animation-name: fadeIn;
 	-moz-animation-name: fadeIn;
 	-ms-animation-name: fadeIn;
@@ -277,6 +277,10 @@ footer {
 	-webkit-animation-delay: 2s;
 	-webkit-animation-iteration-count: 1;
 	-webkit-animation-timing-function: ease;
+}
+
+footer .right {
+	text-align: right;
 }
 
 .copy {
@@ -310,6 +314,9 @@ footer {
 	color: #444;
 }
 
+footer a {
+	color: #fffbed;
+}
 
 
 
