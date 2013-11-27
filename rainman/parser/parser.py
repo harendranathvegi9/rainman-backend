@@ -12,22 +12,6 @@ nltk.data.path.append('./nltk_data/')
 
 MIN_LEN = 0
 
-
-class RainError(Exception):
-    status_code = 400
-
-    def __init__(self, message, status_code=None, payload=None):
-        Exception.__init__(self)
-        self.message = message
-        if status_code is not None:
-            self.status_code = status_code
-        self.payload = payload
-
-    def to_dict(self):
-        rv = dict(self.payload or ())
-        rv['message'] = self.message
-        return rv
-
 class Filters:
 
     def __init__(self):
@@ -187,4 +171,4 @@ class Parser:
         whitelist = []
         blacklist = []
         if (content['raw'].__len__() < MIN_LEN or domain in blacklist) and (domain not in whitelist):
-            raise RainError('Not an article')
+            raise Error('Not an article')
