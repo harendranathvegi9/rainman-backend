@@ -8,7 +8,7 @@ if not app.debug:
 		os.makedirs(app.config['LOG_DIR'])
 
 	handler = logging.handlers.RotatingFileHandler(
-		app.config['LOG_FILENAME'], maxBytes=100000000, backupCount=10)
+		app.config['LOG_FILENAME'], maxBytes=app.config['LOG_MAX_SIZE'], backupCount=app.config['LOG_MAX_NUM'])
 
 	app.logger.setLevel(logging.DEBUG)
 	app.logger.addHandler(handler)
