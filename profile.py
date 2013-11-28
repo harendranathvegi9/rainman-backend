@@ -1,3 +1,6 @@
+"""
+Profiler for the Rainman Flask App
+"""
 from werkzeug.contrib.profiler import ProfilerMiddleware
 from rainman import app
 

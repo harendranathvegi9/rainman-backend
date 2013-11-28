@@ -1,3 +1,6 @@
+"""
+Main Parser class for stripping text, title, and author from article HTML
+"""
 from flask import jsonify
 from readability.readability import Document
 import wikipedia

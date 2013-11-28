@@ -1,3 +1,6 @@
+"""
+Decorators for Flask functions, primarily routes
+"""
 from flask import make_response, current_app, request
 
 from datetime import timedelta
@@ -6,6 +9,24 @@ from functools import update_wrapper
 def crossdomain(origin=None, methods=None, headers=None,
                 max_age=21600, attach_to_all=True,
                 automatic_options=True):
+    """
+    Decorator for HTTP Access Control for Cross-site
+    HTTP requests
+    
+    - `methods` : Optionally a list of allowed methods
+    - `headers` : Optionally a list of allowed headers
+    - `origin` : `*` to allow all origins, otherwise a string
+        with a URL or a list of URLS that are allowed
+    - `max_age` : The number of seconds as an integer for which
+        the preflighted request is valid
+    - `attach_to_all` :  `True` if the decorator should add the
+        access control headers to all HTTP methods or `False` if
+        it should only add them to OPTIONS responses.
+    - `automatic_options` : If enabled the decorator will use
+        the default Flask OPTIONS response and attach the headers
+        there, otherwise the view function will be called to
+        generate an appropriate response.
+    """
     if methods is not None:
         methods = ', '.join(sorted(x.upper() for x in methods))
     if headers is not None and not isinstance(headers, basestring):
