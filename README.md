@@ -26,7 +26,7 @@ Quickstart
 
 ###Installation
 
-First, create a new Python Virtualenv in the root of the directory
+First, create a new Python Virtualenv in the root of the directory.
 
 	$ virtualenv venv --distribute
 
@@ -42,7 +42,7 @@ Finally, start the webapp using [Foreman](http://ddollar.github.io/foreman/).
 
 	$ foreman start
 
-Navigate to [http://localhost:5000](http://localhost:5000)
+Navigate to [http://localhost:5000](http://localhost:5000)!
 
 Testing
 -------
