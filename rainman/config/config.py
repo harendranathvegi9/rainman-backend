@@ -6,8 +6,8 @@ import os
 
 # Base config object: all environments inherit from these settings
 class Config(object):
-	DEBUG = False
-	# Project root, calculated in relation to this file
+    DEBUG = False
+    # Project root, calculated in relation to this file
     PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
     LOG_DIR = os.path.join(PROJECT_ROOT, 'logs')
     LOG_FILENAME = os.path.join(LOG_DIR, 'app.log')

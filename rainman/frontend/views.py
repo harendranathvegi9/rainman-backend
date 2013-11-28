@@ -7,7 +7,7 @@ frontend = Blueprint('frontend', __name__)
 
 @frontend.route('/')
 def home():
-	"""
-	Render static homepage
-	"""
+    """
+    Render static homepage
+    """
     return render_template('index.html')
