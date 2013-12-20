@@ -1,19 +1,17 @@
 Rainman
 =======
 
-[![Build Status](https://travis-ci.org/s3ththompson/rainman-backend.png?branch=master)](https://travis-ci.org/s3ththompson/rainman-backend)
-
 Rainman is a Chrome extension to provide background information on important terms in news articles online.
 
 [http://rainman.io](http://rainman.io)
 
-About
------
-
-The backend API is powered by a Flask app running NLTK, the Python Natural Language Processing (NLP) toolkit.
-
 This application was originally developed in 24 hours by [Seth Thompson](http://seth.fm) & [Geoffrey Litt](http://geoffreylitt.com).
 Rainman won first place at [Y-Hack 2013](http://y-hack.com/).
+
+Backend
+-------
+
+The backend API is powered by a Flask app running NLTK, the Python Natural Language Processing (NLP) toolkit.
 
 Quickstart
 ----------
