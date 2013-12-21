@@ -18,6 +18,7 @@ Quickstart
 
 ###Prerequisites
 
+* gcc
 * Python 2.7
 * [pip](https://pypi.python.org/pypi/pip) (package manager)
 * [Virtualenv](https://pypi.python.org/pypi/virtualenv)
