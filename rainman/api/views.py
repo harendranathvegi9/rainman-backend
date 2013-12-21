@@ -9,23 +9,26 @@ api = Blueprint('api', __name__)
 
 @api.route('/', methods=['POST'])
 # API must accept all content types for correct CORS behavior
-@crossdomain(origin='*', headers=["Accept"])
-def article():
+@crossdomain(origin='*', headers=["Accept", "Content-Type"])
+def parse():
     """
-    Returns the context items for a given article, as well
-    as the readability version of the article.
-
-    The JSON response has the following properties:
-    - `cards` : an array of card objects with the following properties
-        - `images` : a list of image URLs for the card term
-        - `summary` : a summary of the Wikipedia article
-        - `title` : the term title
-        - `url` : the URL to the full Wikipedia article
-    - `content` : the readability formatted article body
-    - `title` : the title of the article itself
+    Returns the context items for a given article.
     """
     r = request.get_json()
-    content = r['content']
-    domain = r['url']
-    p = Parser(content, domain)
-    return p.parse()
+    p = Parser(r['title'], r['text'], r['domain'])
+    ne = p.parse()
+    return jsonify(ne=ne)
+
+@api.route('/admin', methods=['POST'])
+# API must accept all content types for correct CORS behavior
+@crossdomain(origin='*', headers=["Accept", "Content-Type"])
+def admin():
+    """
+    Returns the context items for a given article, along with
+    results from each step of the NLP algorithm.
+    """
+    r = request.get_json()
+    p = Parser(r['title'], r['text'], r['domain'])
+    tagged = p.tag()
+    ne = p.ner()
+    return jsonify(ne=ne)
