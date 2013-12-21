@@ -7,10 +7,9 @@ from ..parser import Parser
 
 api = Blueprint('api', __name__, url_prefix='/api')
 
+@api.route('/article', methods=['POST'])
 # API must accept all content types for correct CORS behavior
-@crossdomain(origin='*', headers=["Accept", "Content-Type"])
-# API must accept OPTIONS method for CORS pre-flight requests
-@api.route('/article', methods=['POST', 'OPTIONS'])
+@crossdomain(origin='*', headers=["Accept"])
 def article():
     """
     Returns the context items for a given article, as well
