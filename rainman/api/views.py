@@ -5,9 +5,9 @@ from flask import Blueprint, request, jsonify
 from ..helpers.decorators import crossdomain
 from ..parser import Parser
 
-api = Blueprint('api', __name__, url_prefix='/api')
+api = Blueprint('api', __name__)
 
-@api.route('/article', methods=['POST'])
+@api.route('/', methods=['POST'])
 # API must accept all content types for correct CORS behavior
 @crossdomain(origin='*', headers=["Accept"])
 def article():

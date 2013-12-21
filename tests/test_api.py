@@ -11,5 +11,5 @@ class TestAPI:
         return
 
     def test_crossdomain(self):
-        response = self.app.get('/api/article')
+        response = self.app.get('/')
         eq_(response.status_code, 405)
