@@ -3,7 +3,8 @@ A Flask blueprint for the Rainman API
 """
 from flask import Blueprint, request, jsonify
 from ..helpers.decorators import crossdomain
-from ..parser import Parser
+from ..lib.parser import Parser
+from ..lib.alchemyapi import AlchemyAPI
 
 api = Blueprint('api', __name__)
 

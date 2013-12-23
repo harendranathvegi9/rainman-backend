@@ -22,6 +22,7 @@ Quickstart
 * Python 2.7
 * [pip](https://pypi.python.org/pypi/pip) (package manager)
 * [Virtualenv](https://pypi.python.org/pypi/virtualenv)
+* [Alchemy API](http://www.alchemyapi.com/) key
 
 ###Installation
 
@@ -36,6 +37,10 @@ Activate the virtualenv.  You must source the environment for each terminal sess
 Next, install the dependencies.
 
 	$ pip install -r requirements.txt
+
+Register an [Alchemy API](http://www.alchemyapi.com/) key:
+
+	$ python rainman/lib/alchemyapi/alchemyapi.py YOUR_API_KEY
 
 Finally, start the webapp using [Foreman](http://ddollar.github.io/foreman/).
 
