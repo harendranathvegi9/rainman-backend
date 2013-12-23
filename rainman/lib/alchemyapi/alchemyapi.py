@@ -122,40 +122,12 @@ class AlchemyAPI:
 		Initializes the SDK so it can send requests to AlchemyAPI for analysis.
 		It loads the API key from api_key.txt and configures the endpoints.
 		"""
-
-		import sys
-		try:
-			# Open the key file and read the key
-			f = open("api_key.txt", "r")
-			key = f.read().strip()
-			
-			if key == '':
-				#The key file should't be blank
-				print('The api_key.txt file appears to be blank, please run: python alchemyapi.py YOUR_KEY_HERE')
-				print('If you do not have an API Key from AlchemyAPI, please register for one at: http://www.alchemyapi.com/api/register.html')
-				sys.exit(0)
-			elif len(key) != 40:
-				#Keys should be exactly 40 characters long
-				print('It appears that the key in api_key.txt is invalid. Please make sure the file only includes the API key, and it is the correct one.')
-				sys.exit(0)
-			else:
-				#setup the key
-				self.apikey = key
-				
-			# Close file
-			f.close()
-		except IOError:
-			#The file doesn't exist, so show the message and create the file.
-			print('API Key not found! Please run: python alchemyapi.py YOUR_KEY_HERE')
-			print('If you do not have an API Key from AlchemyAPI, please register for one at: http://www.alchemyapi.com/api/register.html')
-			
-			#create a blank key file
-			open('api_key.txt', 'a').close()
+		import os
+		key = os.environ.get('ALCHEMY_API')
+		if not key:
+			print('API key not found in environment variable ALCHEMY_API.')
 			sys.exit(0)
-		except Exception as e:
-			print(e)
-
-			
+		self.apikey = key
 
 	def entities(self, flavor, data, options={}):
 		"""

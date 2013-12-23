@@ -6,6 +6,8 @@ from ..helpers.decorators import crossdomain
 from ..lib.parser import Parser
 from ..lib.alchemyapi import AlchemyAPI
 
+import urllib
+
 api = Blueprint('api', __name__)
 
 @api.route('/', methods=['POST'])
@@ -29,7 +31,9 @@ def admin():
     results from each step of the NLP algorithm.
     """
     r = request.get_json()
-    p = Parser(r['title'], r['text'], r['domain'])
-    tagged = p.tag()
-    ne = p.ner()
-    return jsonify(ne=ne)
+    api = AlchemyAPI()
+    return jsonify(ne=api.entities('text',r['text'].encode('utf8')))
+    # p = Parser(r['title'], r['text'], r['domain'])
+    # tagged = p.tag()
+    # ne = p.ner()
+    # return jsonify(ne=ne)

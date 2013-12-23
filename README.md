@@ -38,9 +38,9 @@ Next, install the dependencies.
 
 	$ pip install -r requirements.txt
 
-Register an [Alchemy API](http://www.alchemyapi.com/) key:
+Register an [Alchemy API](http://www.alchemyapi.com/) key and store it in the environment variable `ALCHEMY_API`:
 
-	$ python rainman/lib/alchemyapi/alchemyapi.py YOUR_API_KEY
+	$ export ALCHEMY_API=YOUR_API_KEY
 
 Finally, start the webapp using [Foreman](http://ddollar.github.io/foreman/).
 
