@@ -16,6 +16,6 @@ class Parser(object):
 
         self.full_text = "{title}\n{text}".format(title=self.title, text=self.text)
 
-    def parse(self):
+    def parse(self, verbose=False):
         api = AlchemyAPI()
         return api.entities('text',self.full_text.encode('utf8'))

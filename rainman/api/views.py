@@ -31,5 +31,5 @@ def admin():
     """
     r = request.get_json()
     p = Parser(r['title'], r['text'], r['domain'])
-    entities = p.parse()
+    entities = p.parse(verbose=True)
     return jsonify(entities=entities)
