@@ -14,7 +14,7 @@ class Parser(object):
         self.text = text
         self.domain = domain
 
-        self.full_text = "{title}\n{text}".format(title=self.title, text=self.text)
+        self.full_text = u"{title}\n{text}".format(title=self.title, text=self.text)
 
     def parse(self, verbose=False):
         api = AlchemyAPI()
