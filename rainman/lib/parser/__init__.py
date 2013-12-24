@@ -1,5 +1,5 @@
 """
 Module which contains the parser for the API and all functions
-related to stripping text from article HTML
+related to processing Named Entities
 """
-from parser import Parser
+from document import Document

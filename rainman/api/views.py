@@ -3,7 +3,7 @@ A Flask blueprint for the Rainman API
 """
 from flask import Blueprint, request, jsonify
 from ..helpers.decorators import crossdomain
-from ..lib.parser import Parser
+from ..lib.parser import Document
 
 import urllib
 
@@ -17,8 +17,8 @@ def parse():
     Returns the context items for a given article.
     """
     r = request.get_json()
-    p = Parser(r['title'], r['text'], r['domain'])
-    entities = p.fetch_entities()
+    d = Document(r['title'], r['text'], r['domain'])
+    entities = d.entities()
     return jsonify(entities=entities)
 
 @api.route('/admin', methods=['POST'])
@@ -27,9 +27,9 @@ def parse():
 def admin():
     """
     Returns the context items for a given article, along with
-    results from each step of the NLP algorithm.
+    verbose information about each entity.
     """
     r = request.get_json()
-    p = Parser(r['title'], r['text'], r['domain'])
-    entities = p.fetch_entities(verbose=True)
+    d = Document(r['title'], r['text'], r['domain'])
+    entities = d.entities(verbose=True)
     return jsonify(entities=entities)
