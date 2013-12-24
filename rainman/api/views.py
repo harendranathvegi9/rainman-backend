@@ -18,7 +18,7 @@ def parse():
     """
     r = request.get_json()
     p = Parser(r['title'], r['text'], r['domain'])
-    entities = p.parse()
+    entities = p.fetch_entities()
     return jsonify(entities=entities)
 
 @api.route('/admin', methods=['POST'])
@@ -31,5 +31,5 @@ def admin():
     """
     r = request.get_json()
     p = Parser(r['title'], r['text'], r['domain'])
-    entities = p.parse(verbose=True)
+    entities = p.fetch_entities(verbose=True)
     return jsonify(entities=entities)
