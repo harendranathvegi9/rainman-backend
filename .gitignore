@@ -2,3 +2,5 @@ venv
 *.pyc
 *.env
 logs/
+*.sublime-project
+*.sublime-workspace
