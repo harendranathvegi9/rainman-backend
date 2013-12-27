@@ -2,8 +2,10 @@
 Classes representing each type of Named Entity, and a collection of Named Entities.
 """
 from ..alchemyapi import AlchemyAPI
+from ..bingapi import BingAPI
+import string
 
-class Entities(object):
+class EntityCollection(object):
     """
     Collection of Entity options with group methods.
     """
@@ -21,19 +23,31 @@ class Entities(object):
         api_entities = api.entities('text',text.encode('utf8'))['entities']
         self._entities = [Entity(api_entity) for api_entity in api_entities]
 
-    def fetch_info(self):
+    # Commented out for now because fetch_info doesn't exist for each entity
+    # def fetch_info(self):
+    #     """
+    #     Fetch info for each entity in collection.
+    #     """
+    #     for entity in self._entities:
+    #         entity.fetch_info()
+
+    def fetch_news(self):
         """
-        Fetch info for each entity in collection.
+        Fetch news stories related to the set of entities in this collection
         """
+        entity_names = []
         for entity in self._entities:
-            entity.fetch_info()
+            entity_names.append(entity.text)
+        query_str = string.join(entity_names, " ")
+
+        BingAPI.news(query_str)
 
     def verbose(self):
         """
         Return a list of verbose output from each entity.
         """
         return [entity.verbose() for entity in self._entities]
-    
+
     def output(self):
         """
         Return a list of output from each entity.
@@ -66,11 +80,17 @@ class Entity(object):
         # list of indice tuples
         # self.indices
 
-    def fetch_info(self):
+    def fetch_news(self):
         """
-        Method to fetch info from external service.
+        Fetches news stories about this entity from Bing news API.
         """
-        pass
+        self.news_stories = BingAPI.news(self.text)
+
+    def fetch_image(self):
+        """
+        Fetches images about this entity from Bing news API.
+        """
+        self.images = BingAPI.image(self.text)
 
     def output(self):
         """

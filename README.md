@@ -42,6 +42,10 @@ Register an [Alchemy API](http://www.alchemyapi.com/) key and store it in the en
 
 	$ export ALCHEMY_API=YOUR_API_KEY
 
+Register a Bing Search API key and store it in the env var `BING_API`:
+
+  $ export BING_API=YOUR_API_KEY
+
 Finally, start the webapp using [Foreman](http://ddollar.github.io/foreman/).
 
 	$ foreman start

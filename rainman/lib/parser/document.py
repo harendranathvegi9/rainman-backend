@@ -3,7 +3,7 @@ Document class for representing processed text and returning entities to client.
 """
 from flask import jsonify
 
-from entities import Entities
+from entitycollection import EntityCollection
 
 class Document(object):
     """
@@ -23,7 +23,7 @@ class Document(object):
         """
         Fetches context info and returns final entities.
         """
-        self._entities = Entities(self.full_text)
+        self._entities = EntityCollection(self.full_text)
         self._entities.fetch_info()
         if verbose:
             return self._entities.verbose()
