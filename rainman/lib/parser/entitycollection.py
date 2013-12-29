@@ -3,7 +3,6 @@ Classes representing each type of Named Entity, and a collection of Named Entiti
 """
 from ..alchemyapi import AlchemyAPI
 from ..bingapi import BingAPI
-import string
 
 class EntityCollection(object):
     """
@@ -35,10 +34,7 @@ class EntityCollection(object):
         """
         Fetch news stories related to the set of entities in this collection
         """
-        entity_names = []
-        for entity in self._entities:
-            entity_names.append(entity.text)
-        query_str = string.join(entity_names, " ")
+        query_str = " ".join([entity.text for entity in self._entities])
 
         BingAPI.news(query_str)
 
