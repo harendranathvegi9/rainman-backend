@@ -28,27 +28,23 @@ Quickstart
 
 First, create a new Python Virtualenv in the root of the directory.
 
-	$ virtualenv venv --distribute
+    $ virtualenv venv --distribute
 
 Activate the virtualenv.  You must source the environment for each terminal session.
 
-	$ source venv/bin/activate
+    $ source venv/bin/activate
 
 Next, install the dependencies.
 
-	$ pip install -r requirements.txt
+    $ pip install -r requirements.txt
 
-Register an [Alchemy API](http://www.alchemyapi.com/) key and store it in the environment variable `ALCHEMY_API`:
+Source the necessary API keys into environment variables:
 
-	$ export ALCHEMY_API=YOUR_API_KEY
-
-Register a Bing Search API key and store it in the env var `BING_API`:
-
-  $ export BING_API=YOUR_API_KEY
+    $ source keys
 
 Finally, start the webapp using [Foreman](http://ddollar.github.io/foreman/).
 
-	$ foreman start
+    $ foreman start
 
 Navigate to [http://localhost:5000](http://localhost:5000)!
 
@@ -57,9 +53,9 @@ Testing
 
 Rainman uses the [Nose](http://nose.readthedocs.org/) unittesting framework.
 
-	$ nosetests
+    $ nosetests
 
 Profiling
 ---------
 
-	$ python profile.py
+    $ python profile.py
