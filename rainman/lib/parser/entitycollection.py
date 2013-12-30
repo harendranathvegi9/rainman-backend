@@ -3,7 +3,7 @@ Classes representing each type of Named Entity, and a collection of Named Entiti
 """
 import gevent
 from gevent import monkey
-monkey.patch_all() # patches all calls to Socket in any modules following this line
+monkey.patch_all(thread=False) # patches all calls to Socket in any modules following this line
 
 from ..alchemyapi import AlchemyAPI
 from ..bingapi import BingAPI

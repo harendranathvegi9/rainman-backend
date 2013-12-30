@@ -1,1 +1,1 @@
-web: gunicorn rainman:app
+web: gunicorn --workers=4 rainman:app
