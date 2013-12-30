@@ -32,4 +32,5 @@ def admin():
     r = request.get_json()
     d = Document(r['title'], r['text'], r['domain'])
     entities = d.entities(verbose=True)
+    # news = d.news()
     return jsonify(entities=entities)

@@ -3,6 +3,7 @@ Classes representing each type of Named Entity, and a collection of Named Entiti
 """
 from ..alchemyapi import AlchemyAPI
 from ..bingapi import BingAPI
+from ..freebaseapi import FreebaseAPI
 
 class EntityCollection(object):
     """
@@ -16,27 +17,36 @@ class EntityCollection(object):
 
     def _extract_from_text(self, text):
         """
-        Extract entities from the AlchemyAPI.
+        Extract entities from the given text with the AlchemyAPI.
         """
         api = AlchemyAPI()
         api_entities = api.entities('text',text.encode('utf8'))['entities']
         self._entities = [Entity(api_entity) for api_entity in api_entities]
 
-    # Commented out for now because fetch_info doesn't exist for each entity
-    # def fetch_info(self):
-    #     """
-    #     Fetch info for each entity in collection.
-    #     """
-    #     for entity in self._entities:
-    #         entity.fetch_info()
+    def fetch_info(self):
+        """
+        Fetch info for each entity in collection.
+        """
+        for entity in self._entities:
+            entity.fetch_info()
 
     def fetch_news(self):
         """
         Fetch news stories related to the set of entities in this collection
         """
         query_str = " ".join([entity.text for entity in self._entities])
+        api = BingAPI()
+        self.news = api.news(query_str)
 
-        BingAPI.news(query_str)
+    def sort(self):
+        """
+        Sort the entities in order of most relevant
+        to least relevant.
+        """
+        for entity in self._entities:
+            if not entity.disambiguated:
+                entity.relevance /= 2
+        self._entities.sort(key=lambda e: e.relevance, reverse=True)
 
     def verbose(self):
         """
@@ -56,9 +66,6 @@ class Entity(object):
     Python object representing Named Entity.
     """
     def __init__(self, api_entity):
-        """
-        Init from dict returned by API
-        """
         # original text match
         self.text = api_entity['text']
         # type of entity
@@ -72,21 +79,51 @@ class Entity(object):
         try:
             self.disambiguated = api_entity['disambiguated']
         except:
+            self.disambiguated = None
             pass
+
+        self.description = None
+        self.image_url = None
         # list of indice tuples
         # self.indices
 
-    def fetch_news(self):
-        """
-        Fetches news stories about this entity from Bing news API.
-        """
-        self.news_stories = BingAPI.news(self.text)
+    # def fetch_news(self):
+    #     """
+    #     Fetches news stories about this entity from Bing news API.
+    #     """
+    #     api = BingAPI()
+    #     self.news_stories = api.news(self.text)
 
-    def fetch_image(self):
+    # def fetch_image(self):
+    #     """
+    #     Fetches images about this entity from Bing news API.
+    #     """
+    #     api = BingAPI()
+    #     self.images = api.image(self.text)
+
+    @property
+    def _freebase_mid(self):
         """
-        Fetches images about this entity from Bing news API.
+        Property of the Freebase MQL ID of the entity, or None
+        if the entity was not disambiguated by Alchemy.
         """
-        self.images = BingAPI.image(self.text)
+        try:
+            freebase_url = self.disambiguated['freebase']
+            mid_frag = freebase_url.rpartition('/')[-2:]
+            mid = "".join(mid_frag).replace('.','/')
+            return mid
+        except:
+            return None
+
+    def fetch_info(self):
+        """
+        Method to fetch info from external service.
+        """
+        if not self._freebase_mid:
+            return
+        api = FreebaseAPI(self._freebase_mid)
+        self.description = api.description()
+        self.image_url = api.image_url()
 
     def output(self):
         """
@@ -94,7 +131,9 @@ class Entity(object):
         """
         return {
             'text': self.text,
-            'type': self.type
+            'type': self.type,
+            'description': self.description,
+            'image_url': self.image_url
         }
 
     def verbose(self):
@@ -105,5 +144,9 @@ class Entity(object):
             'text': self.text,
             'type': self.type,
             'relevance': self.relevance,
-            'count': self.count
+            'count': self.count,
+            'disambiguated': self.disambiguated,
+            'mid': self._freebase_mid,
+            'description': self.description,
+            'image_url': self.image_url
         }

@@ -25,7 +25,17 @@ class Document(object):
         """
         self._entities = EntityCollection(self.full_text)
         self._entities.fetch_info()
+        self._entities.sort()
         if verbose:
             return self._entities.verbose()
         else:
             return self._entities.output()
+
+    def news(self):
+        """
+        Fetches news articles related to the given document.
+        """
+        if not self._entities:
+            self.entities()
+        self._entities.fetch_news()
+        return self._entities.news
