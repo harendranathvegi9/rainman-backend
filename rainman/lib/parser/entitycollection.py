@@ -1,6 +1,10 @@
 """
 Classes representing each type of Named Entity, and a collection of Named Entities.
 """
+import gevent
+from gevent import monkey
+monkey.patch_all() # patches all calls to Socket in any modules following this line
+
 from ..alchemyapi import AlchemyAPI
 from ..bingapi import BingAPI
 from ..freebaseapi import FreebaseAPI
@@ -27,8 +31,9 @@ class EntityCollection(object):
         """
         Fetch info for each entity in collection.
         """
-        for entity in self._entities:
-            entity.fetch_info()
+        
+        jobs = [gevent.spawn(entity.fetch_info) for entity in self._entities]
+        gevent.joinall(jobs, timeout=5)
 
     def fetch_news(self):
         """
