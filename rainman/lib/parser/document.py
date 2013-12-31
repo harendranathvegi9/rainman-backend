@@ -26,6 +26,7 @@ class Document(object):
         self._entities = EntityCollection(self.full_text)
         self._entities.fetch_info()
         self._entities.sort()
+        self._entities.find_indices_in_text(self.full_text)
         if verbose:
             return self._entities.verbose()
         else:

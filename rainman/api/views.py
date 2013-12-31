@@ -19,7 +19,8 @@ def parse():
     r = request.get_json()
     d = Document(r['title'], r['text'], r['domain'])
     entities = d.entities()
-    return jsonify(entities=entities)
+    text = d.text
+    return jsonify(entities=entities, text=text)
 
 @api.route('/admin', methods=['POST'])
 # API must accept all content types for correct CORS behavior
@@ -32,5 +33,5 @@ def admin():
     r = request.get_json()
     d = Document(r['title'], r['text'], r['domain'])
     entities = d.entities(verbose=True)
-    # news = d.news()
-    return jsonify(entities=entities)
+    text = d.text
+    return jsonify(entities=entities, text=text)

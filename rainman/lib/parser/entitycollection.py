@@ -27,6 +27,46 @@ class EntityCollection(object):
         api_entities = api.entities('text',text.encode('utf8'))['entities']
         self._entities = [Entity(api_entity) for api_entity in api_entities]
 
+    def find_indices_in_text(self, text):
+        """
+        Finds the indices in the given text for all entities.
+        """
+        def _find_all(str, sub):
+            "Return indices for all sub matches in str"
+            start = 0
+            while True:
+                start = str.find(sub, start)
+                if start == -1: return
+                yield start
+                start += len(sub)
+
+        def _pairwise(iterable):
+            "s -> (s0,s1), (s1,s2), (s2, s3), ..."
+            from itertools import izip, tee
+            a, b = tee(iterable)
+            next(b, None)
+            return izip(a, b)
+
+        def _overlap(tuples, tuple):
+            "True if index range of tuple overlaps with member of tuples"
+            t = list(tuples)
+            t.append(tuple)
+            t.sort()
+            for tuple1, tuple2 in _pairwise(t):
+                if tuple1[1] >= tuple2[0]:
+                    return True
+            return False
+
+        all_indices = []
+        for entity in self._entities:
+            term = entity.text
+            length = len(term)
+            for index in _find_all(text, term):
+                indices = (index, index+length)
+                if not _overlap(all_indices, indices):
+                    all_indices.append(indices)
+                    entity.indices.append(indices)
+
     def fetch_info(self):
         """
         Fetch info for each entity in collection.
@@ -63,7 +103,7 @@ class EntityCollection(object):
         """
         Return a list of output from each entity.
         """
-        return [entity.output() for entity in self._entities]
+        return [entity.output() for entity in self._entities if entity.disambiguated]
 
 
 class Entity(object):
@@ -89,8 +129,9 @@ class Entity(object):
 
         self.description = None
         self.image_url = None
+
         # list of indice tuples
-        # self.indices
+        self.indices = []
 
     # def fetch_news(self):
     #     """
@@ -138,7 +179,8 @@ class Entity(object):
             'text': self.text,
             'type': self.type,
             'description': self.description,
-            'image_url': self.image_url
+            'image_url': self.image_url,
+            'indices': self.indices
         }
 
     def verbose(self):
@@ -153,5 +195,6 @@ class Entity(object):
             'disambiguated': self.disambiguated,
             'mid': self._freebase_mid,
             'description': self.description,
-            'image_url': self.image_url
+            'image_url': self.image_url,
+            'indices': self.indices
         }
