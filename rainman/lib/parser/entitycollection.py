@@ -124,8 +124,10 @@ class Entity(object):
         # info for disambiguity
         try:
             self.disambiguated = api_entity['disambiguated']
+            self.name = self.disambiguated['name']
         except:
             self.disambiguated = None
+            slef.name = self.text
             pass
 
         self.description = None
@@ -178,6 +180,7 @@ class Entity(object):
         """
         return {
             'text': self.text,
+            'name': self.name,
             'type': self.type,
             'description': self.description,
             'image_url': self.image_url,
