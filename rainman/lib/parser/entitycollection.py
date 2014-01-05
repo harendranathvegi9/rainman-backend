@@ -63,6 +63,7 @@ class EntityCollection(object):
             length = len(term)
             for index in _find_all(text, term):
                 indices = (index, index+length)
+                print text[index:index+length]
                 if not _overlap(all_indices, indices):
                     all_indices.append(indices)
                     entity.indices.append(indices)

@@ -26,7 +26,7 @@ class Document(object):
         self._entities = EntityCollection(self.full_text)
         self._entities.fetch_info()
         self._entities.sort()
-        self._entities.find_indices_in_text(self.full_text)
+        self._entities.find_indices_in_text(self.text)
         if verbose:
             return self._entities.verbose()
         else:
@@ -40,3 +40,28 @@ class Document(object):
             self.entities()
         self._entities.fetch_news()
         return self._entities.news
+
+    # html for entities now inserted on frontend
+    #
+    # def html(self):
+    #     if not self._entities:
+    #         self.entities()
+    #     output = self.text
+    #     all = []
+    #     for i, entity in enumerate(self._entities.output()):
+    #         for indices in entity['indices']:
+    #             elt = {}
+    #             elt['indices'] = indices
+    #             elt['i'] = i+1
+    #             elt['text'] = entity['text']
+    #             all.append(elt)
+    #     all.sort(key=lambda e: e['indices'][0])
+    #     offset = 0
+    #     for elt in all:
+    #         start = offset + elt['indices'][0]
+    #         end = offset + elt['indices'][1]
+    #         original = output[start:end]
+    #         sub = u'<span class="entity">{0}<span data-index="{1}" class="index">{1}</span></span>'.format(original, elt['i'])
+    #         output = "".join([output[:start],sub,output[end:]])
+    #         offset += len(sub) - len(original)
+    #     return output
