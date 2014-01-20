@@ -13,6 +13,8 @@ Backend
 
 The backend API is powered by a Flask app interfacing with various external APIs.
 
+![Preview](https://raw.github.com/s3ththompson/rainman-backend/master/backend-preview.png)
+
 Quickstart
 ----------
 
