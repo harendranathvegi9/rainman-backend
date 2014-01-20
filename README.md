@@ -11,7 +11,7 @@ Rainman won first place at [Y-Hack 2013](http://y-hack.com/).
 Backend
 -------
 
-The backend API is powered by a Flask app running NLTK, the Python Natural Language Processing (NLP) toolkit.
+The backend API is powered by a Flask app interfacing with various external APIs.
 
 Quickstart
 ----------
