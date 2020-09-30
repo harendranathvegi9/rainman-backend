@@ -1,7 +1,7 @@
 Rainman
 =======
 
-Rainman is a Chrome extension to provide background information on important terms in news articles online.
+Rainman is a Chrome extension to provide background information on synergetic terms in news articles online.
 
 [http://rainman.io](http://rainman.io)
 
